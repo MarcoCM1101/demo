@@ -1,6 +1,46 @@
-#root {
-  max-width: 1280px;
+.App {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 20px;
+}
+
+.checkout {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.payment-form,
+.billing-address-form,
+.order-summary {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+.payment-form form,
+.billing-address-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-summary .item,
+.order-summary .summary-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.place-order-button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.place-order-button:hover {
+  background-color: #0056b3;
 }

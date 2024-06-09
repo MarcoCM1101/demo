@@ -1,18 +1,13 @@
-import React, { useState } from "react";
-import PaymentForm from "./components/paymentForms.jsx";
-import PaymentResult from "./components/paymentResult.jsx";
+import React from "react";
+import Checkout from "./components/Checkout";
 import "./App.css";
 
-const App = () => {
-  const [paymentResult, setPaymentResult] = useState(null);
-
+function App() {
   return (
     <div className="App">
-      <h1>Payment Simulator</h1>
-      <PaymentForm setPaymentResult={setPaymentResult} />
-      {paymentResult && <PaymentResult result={paymentResult} />}
+      <Checkout />
     </div>
   );
-};
+}
 
 export default App;
