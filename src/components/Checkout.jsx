@@ -5,11 +5,26 @@ import PaymentResult from "./PaymentResult";
 
 const Checkout = () => {
   const [paymentResult, setPaymentResult] = useState(null);
+  const [showPaymentForm, setShowPaymentForm] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setShowPaymentForm(!showPaymentForm);
+  };
 
   return (
     <div className="checkout">
       <OrderSummary />
-      <PaymentForm setPaymentResult={setPaymentResult} />
+      <div className="checkbox-container">
+        <label>
+          <input
+            type="checkbox"
+            checked={showPaymentForm}
+            onChange={handleCheckboxChange}
+          />
+          Payment Gateway Prosa
+        </label>
+      </div>
+      {showPaymentForm && <PaymentForm setPaymentResult={setPaymentResult} />}
       {paymentResult && <PaymentResult result={paymentResult} />}
     </div>
   );

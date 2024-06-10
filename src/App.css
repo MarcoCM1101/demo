@@ -44,3 +44,7 @@
 .place-order-button:hover {
   background-color: #0056b3;
 }
+
+.checkbox-container {
+  margin-top: 20px;
+}
