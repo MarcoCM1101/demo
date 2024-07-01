@@ -1,50 +1,121 @@
+/* Estilos generales */
+body,
+html,
+#root,
 .App {
+  height: 100%;
+  margin: 0;
+}
+
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
   font-family: Arial, sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  text-align: center;
 }
 
-.checkout {
+/* Estilos específicos del componente Cart */
+.Cart {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
-  gap: 20px;
-}
-
-.payment-form,
-.billing-address-form,
-.order-summary {
-  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+  width: 70%;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.payment-form form,
-.billing-address-form form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.order-summary .item,
-.order-summary .summary-details {
+.Product {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
 }
 
-.place-order-button {
-  padding: 10px;
+/* Dividir en columnas */
+.Product .column {
+  flex: 1;
+}
+
+.Product .text {
+  text-align: right;
+  margin-right: 200px;
+}
+
+.Product img {
+  width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-left: 20px;
+}
+
+/* Estilos adicionales */
+.Product .text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.Product h2 {
+  margin: 0;
+}
+
+.Product p {
+  margin: 5px 0;
+}
+
+/* Estilos para el formulario de pago */
+.PaymentForm {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.PaymentForm form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.PaymentForm .form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin-bottom: 10px;
+}
+
+.PaymentForm label {
+  width: 30%; /* Ajusta el ancho del label */
+  text-align: left;
+  padding-right: 10px; /* Espacio entre el label y el input */
+}
+
+.PaymentForm input {
+  width: 70%; /* Ajusta el ancho del input */
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #2e2e2e;
+}
+
+.PaymentForm button {
+  margin-top: 20px;
+  padding: 10px 20px;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-.place-order-button:hover {
+.PaymentForm button:hover {
   background-color: #0056b3;
-}
-
-.checkbox-container {
-  margin-top: 20px;
 }
