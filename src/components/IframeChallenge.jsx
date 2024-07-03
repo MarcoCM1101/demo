@@ -10,7 +10,7 @@ const StepUpIframe = ({ jwtChallenge }) => {
   }, []);
 
   return (
-    <div>
+    <div className="Iframe">
       <iframe
         name="step-up-iframe"
         height="600"

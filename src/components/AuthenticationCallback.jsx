@@ -10,13 +10,24 @@ const AuthenticationCallback = () => {
     const transactionId = query.get("transactionId");
     console.log("Transaction Status:", transactionStatus);
     console.log("Transaction ID:", transactionId);
-    // Haz algo con la información de la transacción aquí, como validar la transacción en el servidor
+    // Aquí puedes manejar la respuesta de la transacción, como validar la transacción en el servidor
+    if (transactionId) {
+      sessionStorage.setItem("transactionId", transactionId);
+    }
   }, [location]);
 
   return (
-    <div>
+    <div className="Iframe">
       <h2>Authentication Callback</h2>
       <p>Autenticación completada.</p>
+      <p>
+        Transaction Status:{" "}
+        {new URLSearchParams(location.search).get("transactionStatus")}
+      </p>
+      <p>
+        Transaction ID:{" "}
+        {new URLSearchParams(location.search).get("transactionId")}
+      </p>
     </div>
   );
 };

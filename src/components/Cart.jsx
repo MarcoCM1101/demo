@@ -6,12 +6,15 @@ const Cart = () => {
   const [cartId, setCartId] = useState(null);
 
   useEffect(() => {
-    // Generar un número aleatorio para el ID del carrito
     const generateCartId = () => {
       return Math.floor(Math.random() * 1000000);
     };
     setCartId(generateCartId());
   }, []);
+
+  const handleReloadPage = () => {
+    window.location.reload();
+  };
 
   const product = {
     id: "12345",
@@ -35,6 +38,7 @@ const Cart = () => {
       <div className="PaymentForm">
         {cartId !== null && <PaymentForm cartId={cartId} />}
       </div>
+      <button onClick={handleReloadPage}>Iniciar de nuevo</button>
     </div>
   );
 };

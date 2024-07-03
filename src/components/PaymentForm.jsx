@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import axios from "axios";
 import IframeForm from "./IframeForm";
 import StepUpIframe from "./IframeChallenge";
+import AuthenticationCallback from "./AuthenticationCallback"; // Asegúrate de importar el componente
+import FinalTransaction from "./FinalTransaction"; // Asegúrate de importar el componente
 
 const PaymentForm = ({ cartId }) => {
   const [formData, setFormData] = useState({
@@ -20,6 +22,57 @@ const PaymentForm = ({ cartId }) => {
   const [referenceid, setReference] = useState("");
   const [responseIframe, setResponseIframe] = useState(false);
   const [jwtChallenge, setJwtChallenge] = useState("");
+  const [status, setStatus] = useState("");
+  const [isloading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const transactionId = sessionStorage.getItem("transactionId");
+      if (transactionId) {
+        const validateData = {
+          clientReferenceInformation: {
+            code: cartId,
+          },
+          orderInformation: {
+            amountDetails: {
+              currency: "MXN",
+              totalAmount: "10.99",
+            },
+          },
+          paymentInformation: {
+            card: {
+              type: "001",
+              number: formData.cardNumber,
+              expirationMonth: formData.expirationMonth,
+              expirationYear: formData.expirationYear,
+            },
+          },
+          consumerAuthenticationInformation: {
+            authenticationTransactionId: transactionId,
+          },
+        };
+
+        axios
+          .post(
+            "http://localhost:8080/payerAuthentication/validate",
+            validateData
+          )
+          .then((response) => {
+            console.log("Validation successful:", response.data.status);
+            setStatus(response.data.status);
+            setJwtChallenge("");
+            clearInterval(intervalId); // Detiene la verificación después de una validación exitosa
+            sessionStorage.removeItem("transactionId");
+          })
+          .catch((error) => {
+            console.error("There was an error during validation:", error);
+            sessionStorage.removeItem("transactionId");
+          });
+      }
+    }, 5000); // Verifica cada 5 segundos
+
+    return () => clearInterval(intervalId); // Limpia el intervalo cuando el componente se desmonte
+  }, [cartId, formData]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -32,7 +85,6 @@ const PaymentForm = ({ cartId }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Verificar que todos los campos estén llenos
     for (const key in formData) {
       if (formData[key] === "") {
         alert("Todos los campos son requeridos.");
@@ -62,10 +114,10 @@ const PaymentForm = ({ cartId }) => {
           response.data.consumerAuthenticationInformation.accessToken &&
           response.data.consumerAuthenticationInformation.referenceId
         ) {
-          setJwt(response.data.consumerAuthenticationInformation.accessToken); // Set JWT from response
+          setJwt(response.data.consumerAuthenticationInformation.accessToken);
           setReference(
             response.data.consumerAuthenticationInformation.referenceId
-          ); // Set reference from response
+          );
         }
       })
       .catch((error) => {
@@ -75,6 +127,7 @@ const PaymentForm = ({ cartId }) => {
 
   const handleResponseIframe = () => {
     setResponseIframe(true);
+    setIsLoading(true);
 
     const enrollData = {
       clientReferenceInformation: {
@@ -107,7 +160,8 @@ const PaymentForm = ({ cartId }) => {
         },
       },
       consumerAuthenticationInformation: {
-        returnUrl: "http://localhost:5173/authentication-callback",
+        returnUrl:
+          "http://localhost:8080/payerAuthentication/challengeResponse",
         referenceId: referenceid,
         transactionMode: "eCommerce",
       },
@@ -119,15 +173,23 @@ const PaymentForm = ({ cartId }) => {
         .post("http://localhost:8080/payerAuthentication/enroll", enrollData)
         .then((response) => {
           console.log("Enrollment successful:", response.data);
+          setIsLoading(false);
           if (response.data.consumerAuthenticationInformation.accessToken) {
             const jwtChallenge1 =
               response.data.consumerAuthenticationInformation.accessToken;
             setJwtChallenge(jwtChallenge1);
             console.log("JWT Challenge:", jwtChallenge1);
+          } else {
+            console.log(
+              "Enrollment successful, no JWT Challenge",
+              response.data.status
+            );
+            setStatus(response.data.status);
           }
         })
         .catch((error) => {
           console.error("There was an error during enrollment:", error);
+          setIsLoading(false);
         });
     }, 10000);
   };
@@ -231,9 +293,12 @@ const PaymentForm = ({ cartId }) => {
         <button type="submit">Pagar</button>
       </form>
 
+      <p>{isloading && "Cargando..."}</p>
+
       {/* Renderiza el iframe con el JWT si está disponible */}
       {jwt && <IframeForm jwt={jwt} setResponseIframe={handleResponseIframe} />}
       {jwtChallenge && <StepUpIframe jwtChallenge={jwtChallenge} />}
+      {status && <FinalTransaction status={status} />}
     </div>
   );
 };
