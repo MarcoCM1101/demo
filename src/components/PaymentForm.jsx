@@ -141,8 +141,8 @@ const PaymentForm = ({ cartId }) => {
         billTo: {
           address1: "Av Jaime Balmes",
           address2: "Address 2",
-          administrativeArea: "CA",
-          country: "US",
+          administrativeArea: "MEX",
+          country: "MX",
           locality: "Mexico City",
           firstName: formData.firstName,
           lastName: formData.lastName,
