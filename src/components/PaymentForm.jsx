@@ -161,7 +161,7 @@ const PaymentForm = ({ cartId }) => {
       },
       consumerAuthenticationInformation: {
         returnUrl:
-          "http://localhost:8080/payerAuthentication/challengeResponse",
+          "https://storefront-payment-beta.enviaflores.com/v1/payments/cybersource/payer_authentication/check_enrollment_response",
         referenceId: referenceid,
         transactionMode: "eCommerce",
       },
